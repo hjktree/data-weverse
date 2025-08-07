@@ -33,12 +33,19 @@
 | 항목 | 설명 | 사고 사례 및 영향 |
 
 | ✅ AWS Access Key / Secret Key | IAM 사용자 생성 시 발급되는 키 쌍 | 💸 키 유출 → 타인이 AWS 리소스 생성 → 수십~수백만 원 과금 발생 사례 다수 |
+
 | ✅ `.pem` 키 파일 | EC2 인스턴스 접속용 SSH 키 | 🔓 키 노출 시 EC2에 누구나 접속 가능 |
+
 | ✅ GitHub Personal Access Token | GitHub 자동화 설정 시 발급 | 🧬 노출되면 리포지토리 전체 권한 탈취 가능 |
+
 | ✅ GitHub Actions Secrets | 자동 배포 시 저장한 민감 정보 | 🔐 Secrets는 코드에서 직접 사용하지 말 것 (출력 금지) |
+
 | ✅ 환경 변수 (.env 파일) | DB 비밀번호, API 키 등 보관 | ⚠️ 커밋 실수 많음, 반드시 `.gitignore` 필요 |
+
 | ✅ RDS, DB, Redis 접속 주소 및 포트 | 내외부 접근 가능한 IP, 포트 포함 | 🔗 외부 침입/디도스 위협 증가 |
+
 | ✅ 인증 토큰, API Key | 외부 서비스(GCP, OpenAI, Slack 등) API 키 | 🎯 대부분의 API 사용량에 따라 요금 발생 |
+
 | ✅ CloudFormation, Terraform 상태 파일 (`.tfstate`) | 암호화되지 않은 상태에서 키 포함될 수 있음 | 🧨 비밀번호, 키 등 포함된 경우 다수 |
 
 ---
@@ -48,9 +55,13 @@
 | 상황 | 조치 방법 |
 
 | ✅실수로 키를 커밋/푸시함 | 즉시 해당 키를 AWS 콘솔에서 삭제 또는 비활성화 |
+
 | ✅`.pem` 파일 업로드됨 | 키 폐기 → 새 키페어 생성 후 다시 설정 |
+
 | ✅GitHub에 Token 노출됨 | GitHub > Developer Settings > Token 삭제 |
+
 | ✅민감 정보 포함된 커밋이 push됨 | 커밋 내역을 `git filter-repo` 등으로 **완전히 제거**하고 새 리포지토리 생성 고려 |
+
 | ✅노출된 리포지토리가 public인 경우 | 즉시 private 전환 후 GitHub에 보안 사고 신고 (https://github.com/contact) |
 
 ---
@@ -60,10 +71,15 @@
 | 수칙 | 설명 |
 
 | 📌 `.gitignore`에 민감 파일 등록 | 예: `.env`, `team-key.pem`, `*.pem`, `secrets.json` 등 |
+
 | 📌 민감정보는 GitHub Actions Secrets에만 저장 | Secrets은 GitHub Settings > Secrets 에서 설정 |
+
 | 📌 `output` 명령어로 Secrets 출력 금지 | 로그에 노출되면 의미 없음 |
+
 | 📌 코드에 하드코딩된 키 금지 | `accessKey = "AKIA..."` 이런 형태는 즉시 탐지됨 |
+
 | 📌 자동 커밋 전 `git status`, `git diff` 반드시 확인 | 실수 방지용 습관화 필요 |
+
 | 📌 GitGuardian 등 민감정보 탐지 툴 사용 권장 | GitHub 연동으로 키 유출 실시간 탐지 가능 |
 
 ---
@@ -71,9 +87,13 @@
 ## 🧠 4. 보안 실수 예방 체크리스트
 
 - 1.`.gitignore`에 `*.pem`, `.env`, `*.tfstate` 포함했는가?
+
 - 2. AWS Key 또는 Token을 코드에 절대 하드코딩하지 않았는가?
+
 - 3. GitHub Actions Secrets를 통해 민감정보를 안전하게 주입했는가?
+
 - 4. 커밋 전 `git diff`, `git status`로 파일 확인을 했는가?
+
 - 5. GitHub에 올린 리포지토리는 기본 `private`으로 설정했는가?
 
 
