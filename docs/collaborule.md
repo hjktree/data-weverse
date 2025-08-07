@@ -86,15 +86,15 @@
 
 ## 🧠 4. 보안 실수 예방 체크리스트
 
-- 1.`.gitignore`에 `*.pem`, `.env`, `*.tfstate` 포함했는가?
+1. `.gitignore`에 `*.pem`, `.env`, `*.tfstate` 포함했는가?
 
-- 2. AWS Key 또는 Token을 코드에 절대 하드코딩하지 않았는가?
+2. AWS Key 또는 Token을 코드에 절대 하드코딩하지 않았는가?
 
-- 3. GitHub Actions Secrets를 통해 민감정보를 안전하게 주입했는가?
+3. GitHub Actions Secrets를 통해 민감정보를 안전하게 주입했는가?
 
-- 4. 커밋 전 `git diff`, `git status`로 파일 확인을 했는가?
+4. 커밋 전 `git diff`, `git status`로 파일 확인을 했는가?
 
-- 5. GitHub에 올린 리포지토리는 기본 `private`으로 설정했는가?
+5. GitHub에 올린 리포지토리는 기본 `private`으로 설정했는가?
 
 
 ---
