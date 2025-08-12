@@ -36,57 +36,9 @@ DevOps 자동화와 실시간 모니터링까지 구현하는 6주 완성형 실
 
 ---
 
-## 🗂️ 디렉토리 구조
+# 협업 규칙
 
-```bash
-auto-scaling-project/
-├── flask-app/              # Flask 앱 코드
-│   └── app.py
-├── scripts/                # EC2 초기 셋업 스크립트
-│   └── setup.sh
-├── monitoring/             # CloudWatch 설정
-│   └── config.json
-├── auto-scaling/           # AMI, ASG, LT 설정
-│   └── auto-scaling-notes.md
-├── docs/                   # 발표자료 및 협업 문서
-│   ├── 협업규칙.md
-│   ├── week1-ec2-nginx.png
-│   ├── architecture.png
-│   ├── week3-auto-scaling-flow.png
-│   ├── aws 과금 방지 규칙.md
-├── .github/
-│   └── workflows/
-│       └── deploy.yml      # GitHub Actions 배포 설정
-├── .gitignore
-└── README.md
-
----
-
-## 📍 최종 목표
-
-- Auto Scaling 기반 안정적 서비스 인프라 구현  
-- 실시간 모니터링 및 자동 복구 구조 실현  
-- 자동화된 간단 CI/CD 파이프라인으로 운영 효율화  
-- 장애 시나리오 실험을 통한 안정성 테스트  
-
----
-
-## ✍️ 작성자 및 팀 정보
-
-| 이름 | 역할 |
-|------|------|
-| 유민선 | 모니터링 & 경보 담당 |
-| 김동욱 | Devops 자동화 담당 |
-| 김성희 | 인프라/네트워크 구성 |
-| 최재원 | 보안 및 서버 운영 담당 |
-| 김현지 | 장애 실험 및 문서화 담당 |
-
----
-
-## 협업 규칙
-
-
-## 중요
+## *중요*
 - 평소 작업한 내용은 각자 노션 혹은 슬랙 등에 보관 
 - 매주 월요일까지 `docs/weekN-역할명.md`에 실습 결과 캡처 및 설명 정리
 
@@ -105,7 +57,6 @@ auto-scaling-project/
 - 제목: `작업 요약 (이름)`
 - 리뷰 후 `main` 브랜치로 merge
 - 팀원 최소 1인 이상 리뷰 후 merge
-
 
 # 🚨 GitHub 협업 시 절대 공유하거나 업로드해서는 안 되는 정보들 (AWS 실습 기준)
 
@@ -201,6 +152,50 @@ auto-scaling-project/
 🔐 **보안을 지키는 것이 곧 팀원 전체의 책임입니다.**  
 💣 작은 실수 하나가 팀 전체 프로젝트를 무너뜨릴 수 있습니다.
 
+## 🗂️ 디렉토리 구조
+
+```bash
+auto-scaling-project/
+├── flask-app/              # Flask 앱 코드
+│   └── app.py
+├── scripts/                # EC2 초기 셋업 스크립트
+│   └── setup.sh
+├── monitoring/             # CloudWatch 설정
+│   └── config.json
+├── auto-scaling/           # AMI, ASG, LT 설정
+│   └── auto-scaling-notes.md
+├── docs/                   # 발표자료 및 협업 문서
+│   ├── 협업규칙.md
+│   ├── week1-ec2-nginx.png
+│   ├── architecture.png
+│   ├── week3-auto-scaling-flow.png
+│   ├── aws 과금 방지 규칙.md
+├── .github/
+│   └── workflows/
+│       └── deploy.yml      # GitHub Actions 배포 설정
+├── .gitignore
+└── README.md
+
 ---
 
+## 📍 최종 목표
+
+- Auto Scaling 기반 안정적 서비스 인프라 구현  
+- 실시간 모니터링 및 자동 복구 구조 실현  
+- 자동화된 간단 CI/CD 파이프라인으로 운영 효율화  
+- 장애 시나리오 실험을 통한 안정성 테스트  
+
+---
+
+## ✍️ 작성자 및 팀 정보
+
+| 이름 | 역할 |
+|------|------|
+| 유민선 | 모니터링 & 경보 담당 |
+| 김동욱 | Devops 자동화 담당 |
+| 김성희 | 인프라/네트워크 구성 |
+| 최재원 | 보안 및 서버 운영 담당 |
+| 김현지 | 장애 실험 및 문서화 담당 |
+
+---
 
