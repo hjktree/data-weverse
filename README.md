@@ -18,7 +18,7 @@ DevOps 자동화와 실시간 모니터링까지 구현하는 6주 완성형 실
 |------|------|
 | 클라우드 | AWS EC2, ALB, Auto Scaling, AMI, CloudWatch |
 | 백엔드 | Python Flask |
-| 배포 & 자동화 | GitHub Actions, Docker, ECR |
+| 배포 & 자동화 | GitHub Actions, Docker|
 | 보안 | UFW, Security Groups |
 | 협업 | Git, GitHub, Branch 전략, PR 리뷰 |
 
@@ -52,7 +52,8 @@ auto-scaling-project/
 │   ├── 협업규칙.md
 │   ├── week1-ec2-nginx.png
 │   ├── architecture.png
-│   └── week3-auto-scaling-flow.png
+│   ├── week3-auto-scaling-flow.png
+│   ├── aws 과금 방지 규칙.md
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml      # GitHub Actions 배포 설정
