@@ -7,8 +7,8 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # 의존성 먼저 설치 (빌드 캐시 최적화)
-COPY requirement.txt .
-RUN pip install --no-cache-dir -r requirement.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # 소스 복사
 COPY . .
