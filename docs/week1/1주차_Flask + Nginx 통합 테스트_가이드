@@ -1,0 +1,87 @@
+## 1단계: 터미널로 EC2 인스턴스에 접속하기 (SSH)
+먼저 내 컴퓨터에서 EC2 서버로 원격 접속을 해야 합니다.
+
+터미널 프로그램을 엽니다.
+
+1. .pem 키 파일이 있는 폴더로 이동합니다. 보통 Downloads 폴더에 있습니다.
+
+cd Downloads
+
+2. 아래 SSH 접속 명령어를 입력하여 EC2 인스턴스에 접속합니다.
+
+[PEM 키 파일 경로]: 내 .pem 파일 이름 (예: my-key.pem)
+
+[EC2 Public IP]: 내 EC2 인스턴스의 공인 IP 주소
+
+ssh -i "[PEM 키 파일 경로]" ubuntu@[EC2 Public IP]
+명령어 예시: ssh -i "my-key.pem" ubuntu@3.34.123.45
+
+이제 터미널은 내 컴퓨터가 아닌 AWS EC2 서버를 제어하게 됩니다.
+
+
+- - - - - - - - - -
+
+
+## 2단계: 가상 환경(virtual environment)을 만들어서 그 안에 Gunicorn을 설치하기
+1. 가상 환경 생성 도구 설치
+먼저 가상 환경을 만들 수 있는 venv 패키지를 설치합니다. (이미 설치했으나 재설치해도 무방)
+
+sudo apt update
+sudo apt install python3.12-venv
+
+2. 가상 환경 활성화
+cd ~/my_flask_app
+source venv/bin/activate
+
+3. Gunicorn과 Flask 설치하기
+(혹시 모르니 한번 더 실행해서 최신 상태를 보장합니다.)
+
+pip install gunicorn flask
+
+4. Gunicorn으로 Flask 앱 실행하기
+
+gunicorn --bind 0.0.0.0:5000 app:app &
+
+
+- - - - - - - - - -
+
+
+## 3단계: Nginx 설정 및 재시작
+사용자의 웹 브라우저 요청(80 포트)을 Gunicorn이 실행 중인 Flask 앱(5000 포트)으로 연결해주는 Nginx 설정을 확인하고 적용합니다.
+
+1. Nginx 설정 파일을 엽니다. (이전 단계에서 이미 설정하셨겠지만 확인차 진행합니다.)
+
+sudo nano /etc/nginx/sites-available/default
+
+2. location / { ... } 블록 안의 내용이 아래와 같이 proxy_pass로 설정되어 있는지 확인합니다.
+
+location / {
+    proxy_pass http://127.0.0.1:5000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+
+proxy_pass http://127.0.0.1:5000; 이 부분이 가장 중요합니다. 80번 포트로 온 요청을 5000번 포트로 넘겨주라는 의미입니다.
+
+수정이 필요했다면 Ctrl + X → Y → Enter 키를 눌러 저장하고 나옵니다.
+
+3. 아래 명령어로 Nginx를 재시작하여 변경된 설정을 적용합니다.
+
+sudo systemctl restart nginx
+
+
+- - - - - - - - -
+
+
+## 4단계: 브라우저로 최종 확인
+이제 모든 준비가 끝났습니다. 웹 브라우저를 통해 최종 확인을 합니다.
+
+크롬(Chrome), 엣지(Edge), 사파리(Safari) 등 웹 브라우저를 엽니다.
+
+주소창에 http:// 와 함께 내 EC2 인스턴스의 Public IP 주소를 입력하고 Enter를 누릅니다. 포트 번호는 입력하지 않습니다.
+
+주소창 예시: http://3.34.123.45
+
+브라우저 화면에 Flask 앱에서 만든 페이지(예: "Hello, World!")가 나타난다면 모든 과정이 성공적으로 완료된 것입니다. 🥳
