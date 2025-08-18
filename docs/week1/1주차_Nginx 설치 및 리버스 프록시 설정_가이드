@@ -1,0 +1,75 @@
+Nginx 설치 및 리버스 프록시 설정
+
+## 왜 이렇게 해야 하나요?
+안정성 및 성능: Nginx는 대규모 트래픽을 처리하도록 설계된 고성능 웹 서버입니다. Flask의 내장 서버보다 훨씬 안정적입니다.
+
+보안: 사용자는 Nginx에만 접속하고, 실제 앱(Flask)은 서버 내부에 숨겨져 있어 보안에 유리합니다.
+
+로드 밸런싱 및 확장성: 나중에 트래픽이 많아지면 여러 개의 Flask 앱을 띄우고 Nginx가 트래픽을 분산시켜주는 등 확장이 쉬워집니다.
+
+
+## 1단계: Nginx 설정 파일 수정
+이전에 Nginx를 설치했으므로, 이제 설정을 변경하여 80번 포트(HTTP)로 들어오는 모든 요청을 우리 Flask 앱이 실행 중인 5000번 포트로 전달하도록 하겠습니다.
+
+EC2 서버에 SSH로 접속합니다.
+
+기본 Nginx 설정 파일을 텍스트 편집기 nano로 엽니다.
+
+sudo nano /etc/nginx/sites-available/default
+
+열린 파일에서 location / { ... } 부분을 찾으세요. 아마 아래와 같이 되어 있을 겁니다.
+
+location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+}
+
+이 location / { ... } 블록의 내용을 아래 코드로 완전히 교체하세요. try_files ... 줄을 지우고 아래 proxy_pass 관련 내용을 붙여넣으면 됩니다.
+
+location / {
+    # 요청을 Flask 앱(localhost:5000)으로 전달합니다.
+    proxy_pass http://127.0.0.1:5000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+
+수정이 끝났으면 Ctrl + X, Y, Enter 키를 순서대로 눌러 저장하고 나옵니다.
+
+## 2단계: Nginx 설정 테스트 및 재시작
+설정 파일을 바꿨으니, 문법에 오류가 없는지 테스트하고 Nginx에 새 설정을 적용합니다.
+
+Nginx 설정 파일의 문법이 올바른지 테스트합니다.
+
+sudo nginx -t
+```syntax is ok` 와 `test is successful` 메시지가 보이면 성공입니다.
+
+Nginx를 재시작하여 변경된 설정을 적용합니다
+
+sudo systemctl restart nginx
+
+## 3단계: Flask 앱 실행
+이제 Nginx는 모든 준비를 마쳤습니다. 뒤에서 일할 Flask 앱을 켜주기만 하면 됩니다.
+
+이전에 만들었던 가상 환경 폴더로 이동하여 활성화합니다.
+
+cd ~/my_flask_app
+source venv/bin/activate
+
+Flask 앱을 실행합니다.
+
+python3 app.py
+
+이전처럼 서버가 실행 중이라는 메시지가 나타나고 터미널이 멈춰있을 겁니다.
+
+## 4단계: 최종 확인
+모든 과정이 끝났습니다!
+
+웹 브라우저를 열고, 주소창에 내 서버의 탄력적 IP 주소를 입력해 보세요. (이제 :5000 같은 포트 번호는 붙이지 않습니다.)
+
+Hello, Flask on EC2!
+
+이 메시지가 보인다면, 여러분은 성공적으로 Nginx 리버스 프록시를 설정한 것입니다. 
+이제 사용자가 80번 포트(기본 웹 포트)로 접속하면 Nginx가 받아서 5000번 포트의 Flask 앱으로 요청을 넘겨주고, 그 결과를 다시 사용자에게 보여주는 구조가 완성되었습니다.
