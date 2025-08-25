@@ -27,6 +27,8 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
 
 USER appuser
 
+ARG APP_VERSION=v1.0
+ENV APP_VERSION=${APP_VERSION}
 EXPOSE 5000
 
 # 워커 2개로 gunicorn 실행 (app:app -> 파일명:변수명)
